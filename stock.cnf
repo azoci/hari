@@ -1,0 +1,5 @@
+[client]
+database = STOCK
+user = hari
+password = thswpsi11
+default-character-set = utf8

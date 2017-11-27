@@ -5,7 +5,6 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'item', views.ItemViewSet)
-router.register(r'evaluation', views.EvaluationFactViewSet)
 router.register(r'value', views.ValueViewSet)
 router.register(r'calendar', views.CalendarViewSet)
 router.register(r'analysis', views.EvaluationFactViewSet)

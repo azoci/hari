@@ -25,8 +25,8 @@ class EvaluationFactViewSet(viewsets.ModelViewSet):
 
     queryset = EvaluationFact.objects.all()
     serializer_class = EvaluationFactSerializer
-    #filter_backends = (DjangoFilterBackend,)
-    #filter_fields = ('cd', 'nm', 'f_yn')
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('item_key', 'value_pkey', 'value_ckey')
 
 class ValueViewSet(viewsets.ModelViewSet):
 

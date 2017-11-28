@@ -130,6 +130,31 @@ class Value(models.Model):
         unique_together = (('pkey', 'ckey'),)
 
 
+class EventHist(models.Model):
+    skey = models.AutoField(db_column='SKEY', primary_key=True)  # Field name made lowercase.
+    dt = models.CharField(db_column='DT', max_length=8)  # Field name made lowercase.
+    nm = models.CharField(db_column='NM', max_length=20)  # Field name made lowercase.
+    content = models.CharField(db_column='CONTENT', max_length=500)  # Field name made lowercase.
+    rate = models.DecimalField(db_column='RATE', max_digits=17, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'EVENT_HIST'
+
+class TradeHist(models.Model):
+    skey = models.AutoField(db_column='SKEY', primary_key=True)  # Field name made lowercase.
+    dt = models.CharField(db_column='DT', max_length=8)  # Field name made lowercase.
+    type_nm = models.CharField(db_column='TYPE_NM', max_length=10)  # Field name made lowercase.
+    item_key = models.ForeignKey(Item, models.DO_NOTHING, db_column='ITEM_KEY')  # Field name made lowercase.
+    num = models.DecimalField(db_column='NUM', max_digits=17, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    price = models.DecimalField(db_column='PRICE', max_digits=17, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    amt = models.DecimalField(db_column='AMT', max_digits=17, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    content = models.CharField(db_column='CONTENT', max_length=500)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'TRADE_HIST'
+
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=80)
 

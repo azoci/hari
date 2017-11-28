@@ -6,11 +6,15 @@ from stock.serializers import ItemSerializer
 from stock.serializers import EvaluationFactSerializer
 from stock.serializers import ValueSerializer
 from stock.serializers import CalendarSerializer
+from stock.serializers import EventHistSerializer
+from stock.serializers import TradeHistSerializer
 
 from stock.models import Item
 from stock.models import EvaluationFact
 from stock.models import Value
 from stock.models import Calendar
+from stock.models import EventHist
+from stock.models import TradeHist
 
 # Create your views here.
 
@@ -37,3 +41,13 @@ class CalendarViewSet(viewsets.ModelViewSet):
 
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
+
+class EventHistViewSet(viewsets.ModelViewSet):
+
+    queryset = EventHist.objects.all()
+    serializer_class = EventHistSerializer
+
+class TradeHistViewSet(viewsets.ModelViewSet):
+
+    queryset = TradeHist.objects.all()
+    serializer_class = TradeHistSerializer

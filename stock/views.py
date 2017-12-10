@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db import connection
 
 from stock.serializers import ItemSerializer
 from stock.serializers import EvaluationFactSerializer
@@ -15,6 +16,7 @@ from stock.models import Value
 from stock.models import Calendar
 from stock.models import EventHist
 from stock.models import TradeHist
+
 
 # Create your views here.
 
@@ -51,3 +53,8 @@ class TradeHistViewSet(viewsets.ModelViewSet):
 
     queryset = TradeHist.objects.all()
     serializer_class = TradeHistSerializer
+
+class ItemInvestViewSet(viewsets.ModelViewSet):
+    queryset = TradeHist.objects.all()
+    serializer_class = TradeHistSerializer
+

@@ -9,6 +9,9 @@ from stock.serializers import ValueSerializer
 from stock.serializers import CalendarSerializer
 from stock.serializers import EventHistSerializer
 from stock.serializers import TradeHistSerializer
+from stock.serializers import ItemInvestSerializer
+from stock.serializers import EvaluationFactInvestSerializer
+
 
 from stock.models import Item
 from stock.models import EvaluationFact
@@ -16,7 +19,7 @@ from stock.models import Value
 from stock.models import Calendar
 from stock.models import EventHist
 from stock.models import TradeHist
-
+from django.db.models import F, DecimalField, Sum, When, Case
 
 # Create your views here.
 
@@ -51,10 +54,45 @@ class EventHistViewSet(viewsets.ModelViewSet):
 
 class TradeHistViewSet(viewsets.ModelViewSet):
 
+
     queryset = TradeHist.objects.all()
     serializer_class = TradeHistSerializer
 
 class ItemInvestViewSet(viewsets.ModelViewSet):
-    queryset = TradeHist.objects.all()
-    serializer_class = TradeHistSerializer
 
+    #queryset = Item.objects.filter(tradehist__num__gt=0).annotate(
+    queryset = Item.objects.filter(f_yn='Y').annotate(
+        buy_amt=(Sum(
+            Case(When(tradehist__type_nm='매수', then='tradehist__num'),
+                default=0,
+                output_field=DecimalField()
+            )
+        ) - Sum(
+            Case(When(tradehist__type_nm='매도', then='tradehist__num'),
+                default=0,
+                output_field=DecimalField()
+            )
+        )) * Sum(
+            Case(When(tradehist__type_nm='매수', then='tradehist__amt'),
+                default=0,
+                output_field=DecimalField()
+            )
+        ) / Sum(
+            Case(When(tradehist__type_nm='매수', then='tradehist__num'),
+                default=0,
+                output_field=DecimalField()
+            )
+        )
+    ).order_by('skey')
+    serializer_class = ItemInvestSerializer
+
+class EvaluationFactInvestViewSet(viewsets.ModelViewSet):
+
+    queryset = Item.objects.filter(f_yn='Y').filter(evaluationfact__value_ckey__in=['403', '404', '405']).annotate(
+        value_pkey=F('evaluationfact__value_pkey'),
+        value_ckey=F('evaluationfact__value_ckey'),
+        tvalue=F('evaluationfact__tvalue'),
+        pvalue=F('evaluationfact__pvalue'),
+        ppvalue=F('evaluationfact__ppvalue')
+    ).order_by('skey', 'evaluationfact__value_ckey')
+    serializer_class = EvaluationFactInvestSerializer

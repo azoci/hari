@@ -36,3 +36,19 @@ class TradeHistSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TradeHist
         fields = ('__all__')
+
+class ItemInvestSerializer(serializers.HyperlinkedModelSerializer):
+    buy_amt = serializers.ReadOnlyField()
+    class Meta:
+        model = Item
+        fields = ('skey', 'cd', 'nm', 'buy_amt')
+
+class EvaluationFactInvestSerializer(serializers.HyperlinkedModelSerializer):
+    value_pkey = serializers.ReadOnlyField()
+    value_ckey = serializers.ReadOnlyField()
+    tvalue = serializers.ReadOnlyField()
+    pvalue = serializers.ReadOnlyField()
+    ppvalue = serializers.ReadOnlyField()
+    class Meta:
+        model = Item
+        fields = ('skey', 'cd', 'nm', 'value_pkey', 'value_ckey', 'tvalue', 'pvalue', 'ppvalue')

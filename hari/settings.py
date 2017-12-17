@@ -92,8 +92,8 @@ DATABASES = {
 #rest framework setting
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
-    #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    #'PAGE_SIZE': 50,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 500,
 }
 
 # Password validation
@@ -138,9 +138,3 @@ STATIC_URL = '/static/'
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOW_CREDENTIALS = False
-
-CORS_ORIGIN_WHITELIST = (
-    'localhost:8000',
-    'localhost:4200',
-    '127.0.0.1:4200',
-)

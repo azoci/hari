@@ -55,7 +55,7 @@ class EventHistViewSet(viewsets.ModelViewSet):
 class TradeHistViewSet(viewsets.ModelViewSet):
 
 
-    queryset = TradeHist.objects.all()
+    queryset = TradeHist.objects.annotate(nm=F('item_key__nm'))
     serializer_class = TradeHistSerializer
 
 class ItemInvestViewSet(viewsets.ModelViewSet):
@@ -73,6 +73,17 @@ class ItemInvestViewSet(viewsets.ModelViewSet):
                 output_field=DecimalField()
             )
         )) * Sum(
+            Case(When(tradehist__type_nm='매수', then='tradehist__amt'),
+                default=0,
+                output_field=DecimalField()
+            )
+        ) / Sum(
+            Case(When(tradehist__type_nm='매수', then='tradehist__num'),
+                default=0,
+                output_field=DecimalField()
+            )
+        ),
+        buy_price=Sum(
             Case(When(tradehist__type_nm='매수', then='tradehist__amt'),
                 default=0,
                 output_field=DecimalField()

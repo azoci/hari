@@ -25,10 +25,10 @@ from django.db.models import F, DecimalField, Sum, When, Case
 
 class ItemViewSet(viewsets.ModelViewSet):
 
-    queryset = Item.objects.all()
+    queryset = Item.objects.all().annotate(key=F('skey'))
     serializer_class = ItemSerializer
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('cd', 'nm', 'f_yn')
+    filter_fields = ('cd', 'nm', 'f_yn', 'yn')
 
 class EvaluationFactViewSet(viewsets.ModelViewSet):
 

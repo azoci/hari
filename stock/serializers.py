@@ -8,6 +8,7 @@ from stock.models import EventHist
 from stock.models import TradeHist
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
+    key = serializers.ReadOnlyField()
     class Meta:
         model = Item
         fields = ('__all__')
@@ -36,7 +37,7 @@ class TradeHistSerializer(serializers.HyperlinkedModelSerializer):
     nm = serializers.ReadOnlyField()
     class Meta:
         model = TradeHist
-        fields = ('dt', 'type_nm', 'num', 'price', 'amt', 'content', 'nm')
+        fields = ('dt', 'type_nm', 'item_key', 'num', 'price', 'amt', 'content', 'nm')
 
 class ItemInvestSerializer(serializers.HyperlinkedModelSerializer):
     buy_amt = serializers.ReadOnlyField()

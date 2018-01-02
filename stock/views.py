@@ -32,7 +32,7 @@ class ItemViewSet(viewsets.ModelViewSet):
 
 class EvaluationFactViewSet(viewsets.ModelViewSet):
 
-    queryset = EvaluationFact.objects.all()
+    queryset = EvaluationFact.objects.all().annotate(ckey=F('value_ckey'), cal_key=F('calendar_key'))
     serializer_class = EvaluationFactSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('item_key', 'value_pkey', 'value_ckey')
@@ -49,13 +49,13 @@ class CalendarViewSet(viewsets.ModelViewSet):
 
 class EventHistViewSet(viewsets.ModelViewSet):
 
-    queryset = EventHist.objects.all()
+    queryset = EventHist.objects.all().order_by('-dt')
     serializer_class = EventHistSerializer
 
 class TradeHistViewSet(viewsets.ModelViewSet):
 
 
-    queryset = TradeHist.objects.annotate(nm=F('item_key__nm'))
+    queryset = TradeHist.objects.annotate(nm=F('item_key__nm')).order_by('-dt')
     serializer_class = TradeHistSerializer
 
 class ItemInvestViewSet(viewsets.ModelViewSet):

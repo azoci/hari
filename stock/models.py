@@ -150,6 +150,8 @@ class TradeHist(models.Model):
     price = models.DecimalField(db_column='PRICE', max_digits=17, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
     amt = models.DecimalField(db_column='AMT', max_digits=17, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
     content = models.CharField(db_column='CONTENT', max_length=500)  # Field name made lowercase.
+    cd = models.CharField(db_column='CD', max_length=6)  # Field name made lowercase.
+    yn = models.CharField(db_column='YN', max_length=1)  # Field name made lowercase.
 
     class Meta:
         managed = False

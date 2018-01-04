@@ -135,7 +135,8 @@ class EventHist(models.Model):
     dt = models.CharField(db_column='DT', max_length=8)  # Field name made lowercase.
     nm = models.CharField(db_column='NM', max_length=20)  # Field name made lowercase.
     content = models.CharField(db_column='CONTENT', max_length=500)  # Field name made lowercase.
-    rate = models.DecimalField(db_column='RATE', max_digits=17, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    prate = models.DecimalField(db_column='PRATE', max_digits=17, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    drate = models.DecimalField(db_column='DRATE', max_digits=17, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False

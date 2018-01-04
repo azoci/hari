@@ -31,15 +31,17 @@ class CalendarSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('__all__')
 
 class EventHistSerializer(serializers.HyperlinkedModelSerializer):
+    key = serializers.ReadOnlyField()
     class Meta:
         model = EventHist
-        fields = ('__all__')
+        fields = ('dt', 'nm', 'prate', 'drate', 'content', 'key')
 
 class TradeHistSerializer(serializers.HyperlinkedModelSerializer):
     nm = serializers.ReadOnlyField()
+    key = serializers.ReadOnlyField()
     class Meta:
         model = TradeHist
-        fields = ('dt', 'type_nm', 'item_key', 'num', 'price', 'amt', 'content', 'nm', 'cd', 'yn')
+        fields = ('dt', 'type_nm', 'item_key', 'num', 'price', 'amt', 'content', 'nm', 'cd', 'yn', 'key')
 
 class ItemInvestSerializer(serializers.HyperlinkedModelSerializer):
     buy_amt = serializers.ReadOnlyField()

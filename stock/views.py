@@ -49,13 +49,12 @@ class CalendarViewSet(viewsets.ModelViewSet):
 
 class EventHistViewSet(viewsets.ModelViewSet):
 
-    queryset = EventHist.objects.all().order_by('-dt')
+    queryset = EventHist.objects.annotate(key=F('skey')).order_by('-dt')
     serializer_class = EventHistSerializer
 
 class TradeHistViewSet(viewsets.ModelViewSet):
 
-
-    queryset = TradeHist.objects.annotate(nm=F('item_key__nm')).order_by('-dt')
+    queryset = TradeHist.objects.annotate(nm=F('item_key__nm'), key=F('skey')).order_by('-dt')
     serializer_class = TradeHistSerializer
 
 class ItemInvestViewSet(viewsets.ModelViewSet):

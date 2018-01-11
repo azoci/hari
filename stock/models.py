@@ -9,6 +9,17 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+#auth setting#
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+
 
 class Calendar(models.Model):
     skey = models.IntegerField(db_column='SKEY', primary_key=True)  # Field name made lowercase.
@@ -39,6 +50,22 @@ class EvaluationFact(models.Model):
         managed = False
         db_table = 'EVALUATION_FACT'
         unique_together = (('item_key', 'value_pkey', 'value_ckey', 'calendar_key'),)
+
+
+class NoticeFact(models.Model):
+    item_key = models.ForeignKey('Item', models.DO_NOTHING, db_column='ITEM_KEY', primary_key=True)  # Field name made lowercase.
+    finance_pkey = models.ForeignKey('Finance', models.DO_NOTHING, db_column='FINANCE_PKEY',related_name='noticefact_finance_pkey')  # Field name made lowercase.
+    finance_ckey = models.ForeignKey('Finance', models.DO_NOTHING, db_column='FINANCE_CKEY',related_name='noticefact_finance_ckey')  # Field name made lowercase.
+    month_key = models.ForeignKey('Month', models.DO_NOTHING, db_column='MONTH_KEY')  # Field name made lowercase.
+    currency = models.CharField(db_column='CURRENCY', max_length=3)  # Field name made lowercase.
+    tamt = models.DecimalField(db_column='TAMT', max_digits=17, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    pamt = models.DecimalField(db_column='PAMT', max_digits=17, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    ppamt = models.DecimalField(db_column='PPAMT', max_digits=17, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'NOTICE_FACT'
+        unique_together = (('item_key', 'finance_pkey', 'finance_ckey', 'month_key'),)
 
 
 class Finance(models.Model):
@@ -96,23 +123,6 @@ class Month(models.Model):
     class Meta:
         managed = False
         db_table = 'MONTH'
-
-
-class NoticeFact(models.Model):
-    item_key = models.ForeignKey(Item, models.DO_NOTHING, db_column='ITEM_KEY', primary_key=True)  # Field name made lowercase.
-    finance_pkey = models.ForeignKey(Finance, models.DO_NOTHING, db_column='FINANCE_PKEY',related_name='noticefact_value_pkey')  # Field name made lowercase.
-    finance_ckey = models.ForeignKey(Finance, models.DO_NOTHING, db_column='FINANCE_CKEY',related_name='noticefact_value_ckey')  # Field name made lowercase.
-    month_key = models.ForeignKey(Month, models.DO_NOTHING, db_column='MONTH_KEY')  # Field name made lowercase.
-    currency = models.CharField(db_column='CURRENCY', max_length=3)  # Field name made lowercase.
-    tamt = models.DecimalField(db_column='TAMT', max_digits=17, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    pamt = models.DecimalField(db_column='PAMT', max_digits=17, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    ppamt = models.DecimalField(db_column='PPAMT', max_digits=17, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'NOTICE_FACT'
-        unique_together = (('item_key', 'finance_pkey', 'finance_ckey', 'month_key'),)
-
 
 class Value(models.Model):
     pkey = models.IntegerField(db_column='PKEY', primary_key=True)  # Field name made lowercase.

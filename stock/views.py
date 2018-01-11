@@ -5,17 +5,20 @@ from django.db import connection
 
 from stock.serializers import ItemSerializer
 from stock.serializers import EvaluationFactSerializer
+from stock.serializers import NoticeFactSerializer
 from stock.serializers import ValueSerializer
+from stock.serializers import FinanceSerializer
 from stock.serializers import CalendarSerializer
 from stock.serializers import EventHistSerializer
 from stock.serializers import TradeHistSerializer
 from stock.serializers import ItemInvestSerializer
 from stock.serializers import EvaluationFactInvestSerializer
 
-
 from stock.models import Item
+from stock.models import NoticeFact
 from stock.models import EvaluationFact
 from stock.models import Value
+from stock.models import Finance
 from stock.models import Calendar
 from stock.models import EventHist
 from stock.models import TradeHist
@@ -37,10 +40,22 @@ class EvaluationFactViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('item_key', 'value_pkey', 'value_ckey')
 
+class NoticeFactViewSet(viewsets.ModelViewSet):
+
+    queryset = NoticeFact.objects.filter(finance_ckey__in =[100,200,300,601,606])
+    serializer_class = NoticeFactSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('item_key', 'finance_pkey', 'finance_ckey', 'month_key')
+
 class ValueViewSet(viewsets.ModelViewSet):
 
     queryset = Value.objects.all()
     serializer_class = ValueSerializer
+
+class FinanceViewSet(viewsets.ModelViewSet):
+
+    queryset = Finance.objects.all()
+    serializer_class = FinanceSerializer
 
 class CalendarViewSet(viewsets.ModelViewSet):
 
@@ -106,3 +121,5 @@ class EvaluationFactInvestViewSet(viewsets.ModelViewSet):
         ppvalue=F('evaluationfact__ppvalue')
     ).order_by('skey', 'evaluationfact__value_ckey')
     serializer_class = EvaluationFactInvestSerializer
+
+
